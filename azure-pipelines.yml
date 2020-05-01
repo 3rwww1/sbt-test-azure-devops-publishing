@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+      - '*'
+  tags:
+    include:
+      - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: sbt publish -Dsbt.ci=true
+  env:
+    AZURE_PAT: $(azurePat)
+  displayName: 'sbt publish'
+
