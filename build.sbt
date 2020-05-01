@@ -2,7 +2,8 @@ publishTo in ThisBuild := Some("vsts" at "https://pkgs.dev.azure.com/aironek/sbt
 
 organization in ThisBuild := "org.test"
 scalaVersion in ThisBuild := "2.11.11"
-version in ThisBuild := "1.0.0"
+dynverVTagPrefix in ThisBuild := false
+version in ThisBuild ~= (_.replace('+', '-').split("-").slice(0, 4).mkString("-") + (sys.env.get("BUILD_BUILDID").map("-" + _).getOrElse("")))
 
 name := "publishing"
 
