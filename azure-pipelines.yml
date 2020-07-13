@@ -28,25 +28,29 @@ steps:
   path: ivy
   displayName: 'checkout Ivy'
 
-- script: sbt publishLocal -Dsbt.ci=true
-  workingDirectory: $(Agent.BuildDirectory)/ivy
-  displayName: 'build Ivy'
 
 # checkout and build sbt develop branch
 - checkout: sbt
   path: sbt
   displayName: 'checkout SBT'
 
-- script: sbt publishLocal -Dsbt.ci=true
-  workingDirectory: $(Agent.BuildDirectory)/sbt
-  displayName: 'build SBT 1.4.0-SNAPSHOT'
-
 # checkout and try publishing sample
 - checkout: self
   path: project
   displayName: 'checkout publishing sample'
 
-- script: sbt publish -Dsbt.ci=true
+- script: cat logging.properties
+  workingDirectory: $(Agent.BuildDirectory)/project
+
+- script: sbt publishLocal -Dsbt.ci=true
+  workingDirectory: $(Agent.BuildDirectory)/ivy
+  displayName: 'build Ivy'
+
+- script: sbt publishLocal -Dsbt.ci=true
+  workingDirectory: $(Agent.BuildDirectory)/sbt
+  displayName: 'build SBT 1.4.0-SNAPSHOT'
+
+- script: sbt publish -Dsbt.ci=true -Djava.util.logging.config.file=./logging.properties
   env:
     AZURE_PAT: $(azurePat)
   workingDirectory: $(Agent.BuildDirectory)/project
