@@ -59,13 +59,13 @@ steps:
   # Try to publish sample to azure artifacts, this time telling azure artifact we are Maven/3.6.3 and not Ivy/someversion'
   # See it work almost automagically :)
 - script: |
-    cp ${HOME}/.ivy2/local/org.scala-sbt.ivy/ivy/2.3.0-sbt-a1430b5a24eef5b7127921824ecec0b199d11e61/jars/ivy.jar \
+    cp ${HOME}/.ivy2/local/org.scala-sbt.ivy/ivy/2.3.0-sbt-c5ec05f44277f889393974973277245226516abe/jars/ivy.jar \
     ${HOME}/.sbt/boot/scala-2.12.11/org.scala-sbt/sbt/1.4.0-SNAPSHOT/ivy-2.3.0-sbt-fa726854dd30be842ff9e6d2093df6adfe3871f5.jar
   workingDirectory: $(Agent.BuildDirectory)/ivy
   condition: or(failed(), succeeded())
   displayName: 'override Ivy lib with one that overrides its UA string'
 
-- script: sbt publish -Dsbt.ci=true
+- script: sbt publish -Dsbt.ci=true -Djava.util.logging.config.file=./logging.properties
   env:
     AZURE_PAT: $(azurePat)
   workingDirectory: $(Agent.BuildDirectory)/project
